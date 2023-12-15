@@ -67,6 +67,6 @@ class HomeviewInteractor:PresenterToInteractorHomeViewProtocol{
     
     
     func deleteUser(Id: String) {
-        print("\(Id) silindi")
+        ref.child(Id).removeValue()
     }
 }
