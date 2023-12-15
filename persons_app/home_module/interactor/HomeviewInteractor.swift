@@ -6,16 +6,34 @@
 //
 
 import Foundation
+import Firebase
 class HomeviewInteractor:PresenterToInteractorHomeViewProtocol{
     var homeViewPresenter: InteractorToPresenterHomeViewProtocol?
+    var ref = Database.database().reference().child("kisiler")
     
     func fetchAllUser() {
-        var personList = [Person]()
-        let k1 = Person(kisi_id: "1",kisi_ad: "Ahmet",kisi_tel: "5454333333")
-        let k2 = Person(kisi_id: "1",kisi_ad: "Mehmet",kisi_tel: "5454")
-        personList.append(k1)
-        personList.append(k2)
-        homeViewPresenter?.presenteraVeriGonder(kisilerListesi: personList)
+       
+        ref.observe(.value,with: { snapshot in
+            
+            
+            var personList = [Person]()
+            
+            if let response = snapshot.value as? [String:AnyObject]{
+                for row in response {
+                    if let d = row.value as? NSDictionary {
+                        var kisi_id = row.key
+                        var kisi_ad = d["kisi_ad"] as? String ?? ""
+                        var kisi_tel = d["kisi_tel"] as? String ?? ""
+                        
+                        let person = Person(kisi_id: kisi_id,kisi_ad: kisi_ad,kisi_tel: kisi_tel)
+                        personList.append(person)
+                    }
+                }
+            }
+           
+            self.homeViewPresenter?.presenteraVeriGonder(kisilerListesi: personList)
+        })
+      
     }
     
     func searchUser(searchKey: String) {

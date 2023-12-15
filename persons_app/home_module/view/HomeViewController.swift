@@ -35,7 +35,11 @@ class HomeViewController: UIViewController {
 extension HomeViewController:PresenterToViewHomeViewProtocol{
     func vieweVeriGonder(kisilerListesi: Array<Person>) {
         self.personList = kisilerListesi
-        self.personTableView.reloadData()
+        
+        DispatchQueue.main.async {
+            self.personTableView.reloadData()
+        }
+      
     }
     
     
