@@ -47,7 +47,12 @@ extension HomeViewController:PresenterToViewHomeViewProtocol{
 extension HomeViewController : UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        homeviewPresenterObject?.searchUser(searchKey: searchText)
+        if searchText == ""{
+            homeviewPresenterObject?.fetchAllUser()
+        }else {
+            homeviewPresenterObject?.searchUser(searchKey: searchText)
+        }
+      
     }
 }
 

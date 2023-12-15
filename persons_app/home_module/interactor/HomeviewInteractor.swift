@@ -21,9 +21,9 @@ class HomeviewInteractor:PresenterToInteractorHomeViewProtocol{
             if let response = snapshot.value as? [String:AnyObject]{
                 for row in response {
                     if let d = row.value as? NSDictionary {
-                        var kisi_id = row.key
-                        var kisi_ad = d["kisi_ad"] as? String ?? ""
-                        var kisi_tel = d["kisi_tel"] as? String ?? ""
+                        let kisi_id = row.key
+                        let kisi_ad = d["kisi_ad"] as? String ?? ""
+                        let kisi_tel = d["kisi_tel"] as? String ?? ""
                         
                         let person = Person(kisi_id: kisi_id,kisi_ad: kisi_ad,kisi_tel: kisi_tel)
                         personList.append(person)
@@ -38,7 +38,33 @@ class HomeviewInteractor:PresenterToInteractorHomeViewProtocol{
     
     func searchUser(searchKey: String) {
         print("Aranan Metin \(searchKey)")
+        ref.observe(.value,with: { snapshot in
+            
+            
+            var personList = [Person]()
+            
+            if let response = snapshot.value as? [String:AnyObject]{
+                for row in response {
+                    if let d = row.value as? NSDictionary {
+                        let kisi_id = row.key
+                        let kisi_ad = d["kisi_ad"] as? String ?? ""
+                        let kisi_tel = d["kisi_tel"] as? String ?? ""
+                        
+                        if  kisi_ad.lowercased().contains(searchKey.lowercased()){
+                            
+                            let person = Person(kisi_id: kisi_id,kisi_ad: kisi_ad,kisi_tel: kisi_tel)
+                            personList.append(person)
+                        }
+                       
+                    }
+                }
+            }
+           
+            self.homeViewPresenter?.presenteraVeriGonder(kisilerListesi: personList)
+        })
+      
     }
+    
     
     func deleteUser(Id: String) {
         print("\(Id) silindi")
