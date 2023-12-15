@@ -12,6 +12,10 @@ class AddPersonInteractor : PresenterToInteractorAddPersonProtocol{
 
     func addPerson(user_name: String, number: String) {
         print("UserName \(user_name ) tel \(number )")
+        
+        let person = ["kisi_id":"","kisi_ad":user_name,"kisi_tel":number]
+        
+        ref.childByAutoId().setValue(person)
     }
     
     
